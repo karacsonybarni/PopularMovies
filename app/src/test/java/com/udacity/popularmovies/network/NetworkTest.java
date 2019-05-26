@@ -12,16 +12,7 @@ public class NetworkTest {
     private Network network;
 
     public NetworkTest() {
-        network = new Network(mockProgressListener());
-    }
-
-    private ProgressListener mockProgressListener() {
-        return new ProgressListener() {
-            @Override
-            public void notifyOnProgress(Integer... values) {
-
-            }
-        };
+        network = new Network();
     }
 
     @Test

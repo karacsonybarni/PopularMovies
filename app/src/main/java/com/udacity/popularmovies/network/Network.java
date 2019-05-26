@@ -8,12 +8,6 @@ import java.util.Scanner;
 
 class Network {
 
-    private ProgressListener progressListener;
-
-    Network(ProgressListener progressListener) {
-        this.progressListener = progressListener;
-    }
-
     String getString(URL url) throws IOException {
         InputStream stream = null;
         HttpURLConnection connection = null;
@@ -21,14 +15,11 @@ class Network {
         try {
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
-            progressListener.notifyOnProgress(DownloadCallback.Progress.CONNECT_SUCCESS);
             int responseCode = connection.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 throw new IOException("HTTP error code: " + responseCode);
             }
             stream = connection.getInputStream();
-            progressListener.notifyOnProgress(
-                    DownloadCallback.Progress.GET_INPUT_STREAM_SUCCESS, 0);
             if (stream != null) {
                 result = readStream(stream);
             }

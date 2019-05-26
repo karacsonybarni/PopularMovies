@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="popular_movies_query">http://api.themoviedb.org/3/movie/popular?api_key=%1$s</string>
+    <string name="api_key">The API key should be inserted here</string>
 </resources>
