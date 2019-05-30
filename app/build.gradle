@@ -35,4 +35,5 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.12.2'
     testImplementation 'org.robolectric:robolectric:4.2.1'
     testImplementation 'androidx.test.ext:junit:1.1.0'
+    testImplementation 'org.json:json:20180813'
 }
