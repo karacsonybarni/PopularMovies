@@ -1,11 +1,12 @@
 package com.udacity.popularmovies.api;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 
 import com.udacity.popularmovies.MainActivity;
 
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -16,13 +17,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class TMDbTest {
 
-    @Rule
-    public ActivityTestRule<MainActivity> activityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    private ActivityScenario<MainActivity> scenario;
     private CountDownLatch signal = new CountDownLatch(1);
 
-    private TMDb spyTMDb() {
-        TMDb tmdb = new TMDb(activityRule.getActivity()) {
+    @Before
+    public void setup() {
+        scenario = ActivityScenario.launch(MainActivity.class);
+    }
+
+    @Test
+    public void fetchPopularMoviesJson() {
+        scenario.onActivity(activity -> {
+            TMDb tmdb = spyTMDb(activity);
+            activity.getTMDb().getNetworkFragment().setCallback(tmdb);
+            tmdb.fetchPopularMoviesJson();
+        });
+    }
+
+    private TMDb spyTMDb(FragmentActivity activity) {
+        return new TMDb(activity) {
             @Override
             public void fetchPopularMoviesJson() {
                 super.fetchPopularMoviesJson();
@@ -40,12 +53,5 @@ public class TMDbTest {
                 signal.countDown();
             }
         };
-        activityRule.getActivity().getTMDb().getNetworkFragment().setCallback(tmdb);
-        return tmdb;
-    }
-
-    @Test
-    public void fetchPopularMoviesJson() {
-        spyTMDb().fetchPopularMoviesJson();
     }
 }

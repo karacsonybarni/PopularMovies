@@ -10,7 +10,7 @@ import java.net.URL;
 /**
  * Implementation of AsyncTask designed to fetch data from the network.
  */
-class FetchTask extends AsyncTask<String, Integer, FetchTask.Result> {
+class FetchTask extends AsyncTask<String, Void, FetchTask.Result> {
 
     private FetchCallback<String> callback;
     private Network network;
