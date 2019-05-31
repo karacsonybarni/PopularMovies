@@ -2,7 +2,7 @@ package com.udacity.popularmovies.network;
 
 import android.net.NetworkInfo;
 
-public interface FetchCallback<T> {
+public interface DownloadCallback<T> {
 
     /**
      * Indicates that the callback handler needs to update its appearance or information based on

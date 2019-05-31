@@ -1,54 +1,57 @@
 package com.udacity.popularmovies.api;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.network.FetchCallback;
-import com.udacity.popularmovies.network.NetworkFragment;
+import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.network.DownloadListener;
+import com.udacity.popularmovies.network.TextDownloader;
+import com.udacity.popularmovies.utils.json.MoviesParser;
 
-public class TMDb implements FetchCallback<String> {
+import org.json.JSONException;
 
-    private FragmentActivity activity;
-    private NetworkFragment networkFragment;
+import java.util.List;
 
-    private final String popularMoviesUrl;
+public class TMDb implements DownloadListener {
+
+    private Context context;
+    private TextDownloader textDownloader;
+    private String popularMoviesUrl;
+    private MoviesUpdateListener moviesUpdateListener;
 
     public TMDb(FragmentActivity activity) {
-        this.activity = activity;
-        String apiKey = activity.getString(R.string.api_key);
-        popularMoviesUrl = activity.getString(R.string.popular_movies_query, apiKey);
-        networkFragment =
-                NetworkFragment.getInstance(
-                        activity.getSupportFragmentManager(),
-                        this);
+        this.context = activity;
+        textDownloader = new TextDownloader(activity, this);
+        initUrl();
     }
 
-    public void fetchPopularMoviesJson() {
-        networkFragment.fetch(popularMoviesUrl);
+    private void initUrl() {
+        String apiKey = context.getString(R.string.api_key);
+        popularMoviesUrl = context.getString(R.string.popular_movies_query, apiKey);
     }
 
-    @Override
-    public void updateFromDownload(String result) {
-
+    public void fetchPopularMovies() {
+        textDownloader.download(popularMoviesUrl);
     }
 
     @Override
-    public NetworkInfo getActiveNetworkInfo() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return connectivityManager.getActiveNetworkInfo();
+    public void onDataDownloaded(String data) {
+        if (data == null) {
+            Toast.makeText(context, R.string.no_internet_error, Toast.LENGTH_LONG).show();
+            return;
+        }
+        try {
+            List<Movie> movies = MoviesParser.parse(data);
+            moviesUpdateListener.onMoviesUpdated(movies);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void finishDownloading() {
-
-    }
-
-    NetworkFragment getNetworkFragment() {
-        return networkFragment;
+    public void setMoviesUpdateListener(MoviesUpdateListener moviesUpdateListener) {
+        this.moviesUpdateListener = moviesUpdateListener;
     }
 }

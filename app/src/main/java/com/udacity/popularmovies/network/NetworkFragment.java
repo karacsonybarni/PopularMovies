@@ -13,16 +13,15 @@ public class NetworkFragment extends Fragment {
 
     private static final String TAG = "NetworkFragment";
 
-    private FetchCallback<String> callback;
-    private FetchTask fetchTask;
+    private DownloadCallback<String> callback;
+    private DownloadTask downloadTask;
 
-    private NetworkFragment(FetchCallback<String> callback) {
-        this.callback = callback;
+    private NetworkFragment() {
     }
 
-    public static NetworkFragment getInstance(
+    static NetworkFragment getInstance(
             FragmentManager fragmentManager,
-            FetchCallback<String> fetchCallback) {
+            DownloadCallback<String> downloadCallback) {
 
         // Recover NetworkFragment in case we are re-creating the Activity due to a config change.
         // This is necessary because NetworkFragment might have a task that began running before
@@ -31,9 +30,10 @@ public class NetworkFragment extends Fragment {
         NetworkFragment networkFragment = (NetworkFragment) fragmentManager
                 .findFragmentByTag(NetworkFragment.TAG);
         if (networkFragment == null) {
-            networkFragment = new NetworkFragment(fetchCallback);
+            networkFragment = new NetworkFragment();
             fragmentManager.beginTransaction().add(networkFragment, TAG).commit();
         }
+        networkFragment.callback = downloadCallback;
         return networkFragment;
     }
 
@@ -58,24 +58,20 @@ public class NetworkFragment extends Fragment {
     }
 
     /**
-     * Start non-blocking execution of FetchTask.
+     * Start non-blocking execution of DownloadTask.
      */
-    public void fetch(String urlString) {
+    void startDownload(String urlString) {
         cancelDownload();
-        fetchTask = new FetchTask(callback);
-        fetchTask.execute(urlString);
+        downloadTask = new DownloadTask(callback);
+        downloadTask.execute(urlString);
     }
 
     /**
-     * Cancel (and interrupt if necessary) any ongoing FetchTask execution.
+     * Cancel (and interrupt if necessary) any ongoing DownloadTask execution.
      */
     private void cancelDownload() {
-        if (fetchTask != null) {
-            fetchTask.cancel(true);
+        if (downloadTask != null) {
+            downloadTask.cancel(true);
         }
-    }
-
-    public void setCallback(FetchCallback<String> callback) {
-        this.callback = callback;
     }
 }

@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.udacity.popularmovies.MainActivity;
+import com.udacity.popularmovies.mainview.MainActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,16 +29,15 @@ public class TMDbTest {
     public void fetchPopularMoviesJson() {
         scenario.onActivity(activity -> {
             TMDb tmdb = spyTMDb(activity);
-            activity.getTMDb().getNetworkFragment().setCallback(tmdb);
-            tmdb.fetchPopularMoviesJson();
+            tmdb.fetchPopularMovies();
         });
     }
 
     private TMDb spyTMDb(FragmentActivity activity) {
         return new TMDb(activity) {
             @Override
-            public void fetchPopularMoviesJson() {
-                super.fetchPopularMoviesJson();
+            public void fetchPopularMovies() {
+                super.fetchPopularMovies();
                 try {
                     signal.await();
                 } catch (InterruptedException e) {
@@ -47,8 +46,7 @@ public class TMDbTest {
             }
 
             @Override
-            public void updateFromDownload(String result) {
-                super.updateFromDownload(result);
+            public void onDataDownloaded(String result) {
                 assertThat(result).isNotEmpty();
                 signal.countDown();
             }

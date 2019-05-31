@@ -10,9 +10,9 @@ import java.net.URL;
 /**
  * Implementation of AsyncTask designed to fetch data from the network.
  */
-class FetchTask extends AsyncTask<String, Void, FetchTask.Result> {
+class DownloadTask extends AsyncTask<String, Void, DownloadTask.Result> {
 
-    private FetchCallback<String> callback;
+    private DownloadCallback<String> callback;
     private Network network;
 
     /**
@@ -33,7 +33,7 @@ class FetchTask extends AsyncTask<String, Void, FetchTask.Result> {
         }
     }
 
-    FetchTask(FetchCallback<String> callback) {
+    DownloadTask(DownloadCallback<String> callback) {
         this.callback = callback;
         network = new Network();
     }
@@ -59,7 +59,7 @@ class FetchTask extends AsyncTask<String, Void, FetchTask.Result> {
      * Defines work to perform on the background thread.
      */
     @Override
-    protected FetchTask.Result doInBackground(String... urls) {
+    protected DownloadTask.Result doInBackground(String... urls) {
         Result result = null;
         if (!isCancelled() && urls != null && urls.length > 0) {
             String urlString = urls[0];
@@ -79,7 +79,7 @@ class FetchTask extends AsyncTask<String, Void, FetchTask.Result> {
     }
 
     /**
-     * Updates the FetchCallback with the result.
+     * Updates the DownloadCallback with the result.
      */
     @Override
     protected void onPostExecute(Result result) {
