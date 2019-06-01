@@ -3,6 +3,7 @@ package com.udacity.popularmovies.model;
 public class Movie {
 
     private String title;
+    private double popularity;
     private String posterPath;
     private String plotSynopsis;
     private double rating;
@@ -14,6 +15,14 @@ public class Movie {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public double getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
     }
 
     public String getPosterPath() {

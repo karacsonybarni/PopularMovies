@@ -12,6 +12,7 @@ import java.util.List;
 public class MoviesParser {
 
     private static final String TITLE = "title";
+    private static final String POPULARITY = "popularity";
     private static final String POSTER_PATH = "poster_path";
     private static final String PLOT_SYNOPSIS = "overview";
     private static final String USER_RATING = "vote_average";
@@ -36,6 +37,7 @@ public class MoviesParser {
     private static Movie parseMovie(JSONObject movieJSON) throws JSONException {
         Movie movie = new Movie();
         movie.setTitle(movieJSON.getString(TITLE));
+        movie.setPopularity(movieJSON.getDouble(POPULARITY));
         movie.setPosterPath(movieJSON.getString(POSTER_PATH));
         movie.setPlotSynopsis(movieJSON.getString(PLOT_SYNOPSIS));
         movie.setRating(movieJSON.getDouble(USER_RATING));

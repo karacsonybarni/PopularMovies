@@ -2,6 +2,9 @@ package com.udacity.popularmovies.mainview;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,6 +19,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MoviesUpdateListener {
 
+    private TMDb tmdb;
     private MoviesAdapter adapter;
 
     @Override
@@ -23,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tmdb = new TMDb(this);
         adapter = new MoviesAdapter(this);
         initPosterGrid();
         fetchMovies();
@@ -43,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
     }
 
     private void fetchMovies() {
-        TMDb tmdb = new TMDb(this);
         tmdb.setMoviesUpdateListener(this);
         tmdb.fetchPopularMovies();
     }
@@ -51,5 +55,26 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
     @Override
     public void onMoviesUpdated(List<Movie> movies) {
         adapter.updateAll(movies);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.sorting, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_sort_by_popularity) {
+            adapter.updateAll(tmdb.getMoviesSortedByPopularity());
+            return true;
+        }
+        if (id == R.id.action_sort_by_rating) {
+            adapter.updateAll(tmdb.getMoviesSortedByRating());
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

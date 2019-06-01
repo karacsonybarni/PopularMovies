@@ -7,4 +7,7 @@
     <string name="movie_poster_url">http://image.tmdb.org/t/p/w185/%1$s</string>
     
     <string name="no_internet_error">Can\'t connect to the server</string>
+
+    <string name="action_sort_by_popularity">Sort by popularity</string>
+    <string name="action_sort_by_rating">Sort by rating</string>
 </resources>

@@ -16,6 +16,7 @@ public class MoviesParserTest {
         List<Movie> movies = MoviesParser.parse(moviesJSON);
         Movie aladdin = movies.get(0);
         assertThat(aladdin.getTitle()).isEqualTo("Aladdin");
+        assertThat(aladdin.getPopularity()).isEqualTo(501.86);
     }
 
     private String moviesJSON =
