@@ -36,9 +36,4 @@ public class TextDownloader implements DownloadCallback<String> {
                 (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         return connectivityManager.getActiveNetworkInfo();
     }
-
-    @Override
-    public void finishDownloading() {
-
-    }
 }

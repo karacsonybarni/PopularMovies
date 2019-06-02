@@ -70,7 +70,7 @@ public class TMDb implements DownloadListener {
             movies = MoviesParser.parse(data);
             moviesUpdateListener.onMoviesUpdated(movies);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Toast.makeText(context, R.string.incorrect_json, Toast.LENGTH_LONG).show();
         }
     }
 

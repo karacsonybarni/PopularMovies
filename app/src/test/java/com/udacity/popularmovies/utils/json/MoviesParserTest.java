@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class MoviesParserTest {
 
     @Test

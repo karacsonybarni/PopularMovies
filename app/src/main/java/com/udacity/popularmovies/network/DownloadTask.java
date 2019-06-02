@@ -89,7 +89,6 @@ class DownloadTask extends AsyncTask<String, Void, DownloadTask.Result> {
             } else if (result.resultValue != null) {
                 callback.updateFromDownload(result.resultValue);
             }
-            callback.finishDownloading();
         }
     }
 }

@@ -2,7 +2,7 @@ package com.udacity.popularmovies.network;
 
 import android.net.NetworkInfo;
 
-public interface DownloadCallback<T> {
+interface DownloadCallback<T> {
 
     /**
      * Indicates that the callback handler needs to update its appearance or information based on
@@ -14,10 +14,4 @@ public interface DownloadCallback<T> {
      * Get the device's active network status in the form of a NetworkInfo object.
      */
     NetworkInfo getActiveNetworkInfo();
-
-    /**
-     * Indicates that the download operation has finished. This method is called even if the
-     * download hasn't completed successfully.
-     */
-    void finishDownloading();
 }
