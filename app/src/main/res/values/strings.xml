@@ -4,6 +4,7 @@
     <string name="app_name">Popular Movies</string>
 
     <string name="popular_movies_query">http://api.themoviedb.org/3/movie/popular?api_key=%1$s</string>
+    <string name="top_rated_movies_query">http://api.themoviedb.org/3/movie/top_rated?api_key=%1$s</string>
     <string name="movie_poster_url">http://image.tmdb.org/t/p/w185/%1$s</string>
     
     <string name="no_internet_error">Can\'t connect to the server</string>

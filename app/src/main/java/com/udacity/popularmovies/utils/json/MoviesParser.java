@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MoviesParser {
 
@@ -18,14 +17,14 @@ public class MoviesParser {
     private static final String USER_RATING = "vote_average";
     private static final String RELEASE_DATE = "release_date";
 
-    public static List<Movie> parse(String moviesJSON) throws JSONException {
+    public static ArrayList<Movie> parse(String moviesJSON) throws JSONException {
         JSONObject page1 = new JSONObject(moviesJSON);
         JSONArray results = page1.getJSONArray("results");
         return parseResults(results);
     }
 
-    private static List<Movie> parseResults(JSONArray results) throws JSONException {
-        List<Movie> movies = new ArrayList<>();
+    private static ArrayList<Movie> parseResults(JSONArray results) throws JSONException {
+        ArrayList<Movie> movies = new ArrayList<>();
         for (int i = 0; i < results.length(); i++) {
             JSONObject movieJSON = results.getJSONObject(i);
             Movie movie = parseMovie(movieJSON);

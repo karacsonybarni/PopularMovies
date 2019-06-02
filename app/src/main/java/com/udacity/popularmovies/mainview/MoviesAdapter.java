@@ -15,12 +15,12 @@ import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.detailview.DetailActivity;
 import com.udacity.popularmovies.model.Movie;
 
-import java.util.List;
+import java.util.ArrayList;
 
 class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterViewHolder> {
 
     private Context context;
-    private List<Movie> movies;
+    private ArrayList<Movie> movies;
 
     MoviesAdapter(Context context) {
         this.context = context;
@@ -36,7 +36,7 @@ class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterViewHolder>
         }
     }
 
-    void updateAll(List<Movie> movies) {
+    void updateAll(ArrayList<Movie> movies) {
         this.movies = movies;
         if (movies != null) {
             notifyDataSetChanged();
@@ -76,6 +76,10 @@ class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterViewHolder>
     @Override
     public int getItemCount() {
         return movies != null ? movies.size() : 0;
+    }
+
+    ArrayList<Movie> getMovies() {
+        return movies;
     }
 
     class PosterViewHolder extends RecyclerView.ViewHolder {
