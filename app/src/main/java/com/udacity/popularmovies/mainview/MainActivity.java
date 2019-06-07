@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.api.MoviesUpdateListener;
 import com.udacity.popularmovies.api.TMDb;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
     private MovieSorting movieSorting;
     private TMDb tmdb;
     private MoviesAdapter adapter;
+    private RecyclerView posterGrid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
     }
 
     private void initPosterGrid() {
-        RecyclerView posterGrid = findViewById(R.id.posters);
+        posterGrid = findViewById(R.id.posters);
         posterGrid.setLayoutManager(new GridLayoutManager(this, getGridColumnCount()));
         posterGrid.setAdapter(adapter);
     }
@@ -92,6 +94,14 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
     @Override
     public void onMoviesUpdated(ArrayList<Movie> movies) {
         adapter.updateAll(movies);
+    }
+
+    @Override
+    public void onNoMovies() {
+        Snackbar
+                .make(posterGrid, R.string.no_internet_error, Snackbar.LENGTH_LONG)
+                .setAction(R.string.retry, a -> fetchMovies())
+                .show();
     }
 
     @Override

@@ -6,4 +6,5 @@ import java.util.ArrayList;
 
 public interface MoviesUpdateListener {
     void onMoviesUpdated(ArrayList<Movie> movies);
+    void onNoMovies();
 }

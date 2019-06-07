@@ -7,7 +7,8 @@
     <string name="top_rated_movies_query">http://api.themoviedb.org/3/movie/top_rated?api_key=%1$s</string>
     <string name="movie_poster_url">http://image.tmdb.org/t/p/w185/%1$s</string>
     
-    <string name="no_internet_error">Can\'t connect to the server</string>
+    <string name="no_internet_error">No internet connection</string>
+    <string name="retry">Retry</string>
     <string name="incorrect_json">Failed to process the data from the server</string>
 
     <string name="action_sort_by_popularity">Sort by popularity</string>

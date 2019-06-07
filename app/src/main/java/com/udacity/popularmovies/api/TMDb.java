@@ -1,7 +1,7 @@
 package com.udacity.popularmovies.api;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -46,14 +46,15 @@ public class TMDb implements DownloadListener {
     @Override
     public void onDataDownloaded(String data) {
         if (data == null) {
-            Toast.makeText(context, R.string.no_internet_error, Toast.LENGTH_LONG).show();
+            moviesUpdateListener.onNoMovies();
             return;
         }
         try {
             ArrayList<Movie> movies = MoviesParser.parse(data);
             moviesUpdateListener.onMoviesUpdated(movies);
         } catch (JSONException e) {
-            Toast.makeText(context, R.string.incorrect_json, Toast.LENGTH_LONG).show();
+            // shouldn't happen in the production version
+            Log.e(TMDb.class.getSimpleName(), "onDataDownloaded: ", e);
         }
     }
 
