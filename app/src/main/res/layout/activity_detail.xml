@@ -72,11 +72,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/poster"
-                android:layout_marginLeft="@dimen/plot_synopsis_marginHorizontal"
+                android:layout_marginLeft="@dimen/details_view_marginHorizontal"
                 android:layout_marginTop="@dimen/plot_synopsis_marginTop"
-                android:layout_marginRight="@dimen/plot_synopsis_marginHorizontal"
+                android:layout_marginRight="@dimen/details_view_marginHorizontal"
                 android:paddingBottom="@dimen/plot_synopsis_marginBottom"
                 android:textSize="@dimen/plot_synopsis_textSize" />
+
+            <View
+                android:id="@+id/trailers_separator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/trailers_separator_height"
+                android:layout_below="@+id/plot_synopsis"
+                android:layout_marginLeft="@dimen/details_view_marginHorizontal"
+                android:layout_marginRight="@dimen/details_view_marginHorizontal"
+                android:background="@color/trailers_separator"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/trailers_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/trailers_separator"
+                android:layout_marginStart="@dimen/details_view_marginHorizontal"
+                android:layout_marginLeft="@dimen/details_view_marginHorizontal"
+                android:layout_marginTop="@dimen/trailers_label_marginTop"
+                android:text="@string/trailers_label"
+                android:textSize="@dimen/trailers_label_textSize"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/trailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/trailers_label"
+                android:orientation="vertical"
+                android:visibility="gone" />
+
         </RelativeLayout>
     </ScrollView>
 

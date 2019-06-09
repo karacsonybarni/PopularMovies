@@ -10,11 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.api.MoviesUpdateListener;
 import com.udacity.popularmovies.api.TMDb;
 import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.utils.ErrorInfo;
 
 import java.util.ArrayList;
 
@@ -98,10 +98,7 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
 
     @Override
     public void onNoMovies() {
-        Snackbar
-                .make(posterGrid, R.string.no_internet_error, Snackbar.LENGTH_LONG)
-                .setAction(R.string.retry, a -> fetchMovies())
-                .show();
+        ErrorInfo.showNoInternetSnackbar(posterGrid, v -> fetchMovies());
     }
 
     @Override

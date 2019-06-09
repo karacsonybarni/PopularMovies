@@ -24,16 +24,6 @@ class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterViewHolder>
 
     MoviesAdapter(Context context) {
         this.context = context;
-        initPicasso();
-    }
-
-    private void initPicasso() {
-        try {
-            Picasso.get();
-        } catch (IllegalStateException ignored) {
-            Picasso.Builder builder = new Picasso.Builder(context);
-            Picasso.setSingletonInstance(builder.build());
-        }
     }
 
     void updateAll(ArrayList<Movie> movies) {

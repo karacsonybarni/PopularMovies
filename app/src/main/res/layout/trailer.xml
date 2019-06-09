@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/trailer_row_height"
+    android:layout_marginLeft="@dimen/details_view_marginHorizontal"
+    android:layout_marginRight="@dimen/details_view_marginHorizontal"
+    android:drawableStart="@drawable/baseline_play_arrow_black_48"
+    android:drawableLeft="@drawable/baseline_play_arrow_black_48"
+    android:drawablePadding="@dimen/trailer_drawablePadding"
+    android:gravity="center_vertical"
+    android:textSize="@dimen/trailer_textSize" />

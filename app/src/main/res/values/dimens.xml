@@ -4,13 +4,15 @@
     <dimen name="tmdb_logo_with_padding_height">36dp</dimen>
     <dimen name="tmdb_logo_paddingTop">4dp</dimen>
 
+    <dimen name="details_view_marginHorizontal">12dp</dimen>
+
     <dimen name="title_card_height">160dp</dimen>
     <dimen name="title_card_padding">20dp</dimen>
     <dimen name="title_card_elevation">8dp</dimen>
     <dimen name="title_maxTextSize">72sp</dimen>
 
-    <dimen name="detail_poster_height">240dp</dimen>
-    <dimen name="detail_poster_width">160dp</dimen>
+    <dimen name="detail_poster_height">216dp</dimen>
+    <dimen name="detail_poster_width">144dp</dimen>
     <dimen name="detail_poster_marginStart">24dp</dimen>
     <dimen name="detail_poster_marginEnd">48dp</dimen>
     <dimen name="detail_poster_marginTop">12dp</dimen>
@@ -22,9 +24,17 @@
     <dimen name="rating_marginTop">12dp</dimen>
     <dimen name="rating_textSize">18sp</dimen>
 
-    <dimen name="plot_synopsis_marginHorizontal">12dp</dimen>
     <dimen name="plot_synopsis_marginTop">24dp</dimen>
-    <dimen name="plot_synopsis_marginBottom">24dp</dimen>
+    <dimen name="plot_synopsis_marginBottom">12dp</dimen>
     <dimen name="plot_synopsis_textSize">20sp</dimen>
+
+    <dimen name="trailers_separator_height">2dp</dimen>
+
+    <dimen name="trailers_label_textSize">24sp</dimen>
+    <dimen name="trailers_label_marginTop">8dp</dimen>
+
+    <dimen name="trailer_row_height">96dp</dimen>
+    <dimen name="trailer_drawablePadding">24dp</dimen>
+    <dimen name="trailer_textSize">20sp</dimen>
 
 </resources>

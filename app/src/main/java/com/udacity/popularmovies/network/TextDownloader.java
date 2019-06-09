@@ -27,7 +27,11 @@ public class TextDownloader implements DownloadCallback<String> {
 
     @Override
     public void updateFromDownload(String result) {
-        downloadListener.onDataDownloaded(result);
+        if (result != null) {
+            downloadListener.onDataDownloaded(result);
+        } else {
+            downloadListener.onNoData();
+        }
     }
 
     @Override

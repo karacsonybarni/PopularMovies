@@ -14,12 +14,14 @@ public class MoviesParserTest {
 
     @Test
     public void parse() throws JSONException {
-        List<Movie> movies = MoviesParser.parse(moviesJSON);
+        List<Movie> movies = Parser.parseMovies(moviesJSON);
         Movie aladdin = movies.get(0);
+        assertThat(aladdin.getId()).isEqualTo(420817);
         assertThat(aladdin.getTitle()).isEqualTo("Aladdin");
         assertThat(aladdin.getPopularity()).isEqualTo(501.86);
     }
 
+    @SuppressWarnings("FieldCanBeLocal")
     private String moviesJSON =
             "{\n" +
             "  \"page\": 1,\n" +

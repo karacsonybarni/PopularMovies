@@ -1,10 +1,10 @@
 package com.udacity.popularmovies.detailview;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.popularmovies.R;
@@ -23,6 +23,8 @@ public class DetailActivity extends AppCompatActivity {
         initMovie(getIntent().getExtras());
         populateViews();
         loadPoster();
+
+        new TrailersPresenter(this).fetchTrailers();
     }
 
     private void initMovie(Bundle extras) {
@@ -49,5 +51,9 @@ public class DetailActivity extends AppCompatActivity {
         String posterUrl = getString(R.string.movie_poster_url, movie.getPosterPath());
         ImageView poster = findViewById(R.id.poster);
         Picasso.get().load(posterUrl).into(poster);
+    }
+
+    public int getMovieId() {
+        return movie.getId();
     }
 }

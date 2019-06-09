@@ -6,6 +6,8 @@
     <string name="popular_movies_query">http://api.themoviedb.org/3/movie/popular?api_key=%1$s</string>
     <string name="top_rated_movies_query">http://api.themoviedb.org/3/movie/top_rated?api_key=%1$s</string>
     <string name="movie_poster_url">http://image.tmdb.org/t/p/w185/%1$s</string>
+    <string name="trailers_url">http://api.themoviedb.org/3/movie/%1$d/videos?api_key=%2$s</string>
+    <string name="reviews_url">http://api.themoviedb.org/3/movie/%1$d/reviews?api_key=%2$s</string>
     
     <string name="no_internet_error">No internet connection</string>
     <string name="retry">Retry</string>
@@ -15,4 +17,6 @@
     <string name="action_sort_by_rating">Sort by rating</string>
 
     <string name="rating">%1$.1f/10</string>
+
+    <string name="trailers_label">Trailers</string>
 </resources>

@@ -1,64 +1,77 @@
 package com.udacity.popularmovies.api;
 
-import android.content.Context;
-import android.util.Log;
-
 import androidx.fragment.app.FragmentActivity;
 
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.model.Movie;
-import com.udacity.popularmovies.network.DownloadListener;
 import com.udacity.popularmovies.network.TextDownloader;
-import com.udacity.popularmovies.utils.json.MoviesParser;
 
-import org.json.JSONException;
+public class TMDb {
 
-import java.util.ArrayList;
+    private FragmentActivity activity;
+    private TextDownloader moviesDownloader;
+    private TextDownloader trailersDownloader;
+    private TextDownloader reviewsDownloader;
 
-public class TMDb implements DownloadListener {
-
-    private Context context;
-    private TextDownloader textDownloader;
+    private String apiKey;
     private String popularMoviesUrl;
     private String topRatedMoviesUrl;
-    private MoviesUpdateListener moviesUpdateListener;
 
     public TMDb(FragmentActivity activity) {
-        this.context = activity;
-        textDownloader = new TextDownloader(activity, this);
-        initUrl();
+        this.activity = activity;
+        initUrls();
     }
 
-    private void initUrl() {
-        String apiKey = context.getString(R.string.api_key);
-        popularMoviesUrl = context.getString(R.string.popular_movies_query, apiKey);
-        topRatedMoviesUrl = context.getString(R.string.top_rated_movies_query, apiKey);
-    }
-
-    public void fetchPopularMovies() {
-        textDownloader.download(popularMoviesUrl);
-    }
-
-    public void fetchTopRatedMovies() {
-        textDownloader.download(topRatedMoviesUrl);
-    }
-
-    @Override
-    public void onDataDownloaded(String data) {
-        if (data == null) {
-            moviesUpdateListener.onNoMovies();
-            return;
-        }
-        try {
-            ArrayList<Movie> movies = MoviesParser.parse(data);
-            moviesUpdateListener.onMoviesUpdated(movies);
-        } catch (JSONException e) {
-            // shouldn't happen in the production version
-            Log.e(TMDb.class.getSimpleName(), "onDataDownloaded: ", e);
-        }
+    private void initUrls() {
+        apiKey = activity.getString(R.string.api_key);
+        popularMoviesUrl = activity.getString(R.string.popular_movies_query, apiKey);
+        topRatedMoviesUrl = activity.getString(R.string.top_rated_movies_query, apiKey);
     }
 
     public void setMoviesUpdateListener(MoviesUpdateListener moviesUpdateListener) {
-        this.moviesUpdateListener = moviesUpdateListener;
+        moviesDownloader =
+                new TextDownloader(activity, newMoviesDownloadListener(moviesUpdateListener));
+    }
+
+    MoviesDownloadListener newMoviesDownloadListener(
+            MoviesUpdateListener moviesUpdateListener) {
+        return new MoviesDownloadListener(moviesUpdateListener);
+    }
+
+    public void fetchPopularMovies() {
+        moviesDownloader.download(popularMoviesUrl);
+    }
+
+    public void fetchTopRatedMovies() {
+        moviesDownloader.download(topRatedMoviesUrl);
+    }
+
+    public void setTrailersUpdateListener(TrailersUpdateListener movieDetailsListener) {
+        trailersDownloader =
+                new TextDownloader(activity, newTrailersDownloadListener(movieDetailsListener));
+    }
+
+    TrailersDownloadListener newTrailersDownloadListener(
+            TrailersUpdateListener trailersUpdateListener) {
+        return new TrailersDownloadListener(trailersUpdateListener);
+    }
+
+    public void fetchTrailers(int id) {
+        String trailersUrl = activity.getString(R.string.trailers_url, id, apiKey);
+        trailersDownloader.download(trailersUrl);
+    }
+
+    public void setReviewsUpdateListener(ReviewsUpdateListener movieDetailsListener) {
+        reviewsDownloader =
+                new TextDownloader(activity, newReviewsDownloadListener(movieDetailsListener));
+    }
+
+    ReviewsDownloadListener newReviewsDownloadListener(
+            ReviewsUpdateListener reviewsUpdateListener) {
+        return new ReviewsDownloadListener(reviewsUpdateListener);
+    }
+
+    public void fetchReviews(int id) {
+        String reviewsUrl = activity.getString(R.string.reviews_url, id, apiKey);
+        reviewsDownloader.download(reviewsUrl);
     }
 }
