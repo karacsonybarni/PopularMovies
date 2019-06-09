@@ -81,11 +81,11 @@
             <View
                 android:id="@+id/trailers_separator"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/trailers_separator_height"
+                android:layout_height="@dimen/thick_separator_height"
                 android:layout_below="@+id/plot_synopsis"
                 android:layout_marginLeft="@dimen/details_view_marginHorizontal"
                 android:layout_marginRight="@dimen/details_view_marginHorizontal"
-                android:background="@color/trailers_separator"
+                android:background="@color/thick_separator"
                 android:visibility="gone" />
 
             <TextView
@@ -95,9 +95,9 @@
                 android:layout_below="@id/trailers_separator"
                 android:layout_marginStart="@dimen/details_view_marginHorizontal"
                 android:layout_marginLeft="@dimen/details_view_marginHorizontal"
-                android:layout_marginTop="@dimen/trailers_label_marginTop"
+                android:layout_marginTop="@dimen/separator_label_marginTop"
                 android:text="@string/trailers_label"
-                android:textSize="@dimen/trailers_label_textSize"
+                android:textSize="@dimen/separator_label_textSize"
                 android:visibility="gone" />
 
             <LinearLayout
@@ -105,6 +105,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/trailers_label"
+                android:orientation="vertical"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/reviews_separator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/thick_separator_height"
+                android:layout_below="@+id/trailers"
+                android:layout_marginLeft="@dimen/details_view_marginHorizontal"
+                android:layout_marginRight="@dimen/details_view_marginHorizontal"
+                android:background="@color/thick_separator"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/reviews_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/reviews_separator"
+                android:layout_marginStart="@dimen/details_view_marginHorizontal"
+                android:layout_marginLeft="@dimen/details_view_marginHorizontal"
+                android:layout_marginTop="@dimen/separator_label_marginTop"
+                android:text="@string/reviews_label"
+                android:textSize="@dimen/separator_label_textSize"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/reviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/reviews_label"
                 android:orientation="vertical"
                 android:visibility="gone" />
 

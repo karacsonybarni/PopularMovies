@@ -25,6 +25,7 @@ public class DetailActivity extends AppCompatActivity {
         loadPoster();
 
         new TrailersPresenter(this).fetchTrailers();
+        new ReviewsPresenter(this).fetchReviews();
     }
 
     private void initMovie(Bundle extras) {

@@ -1,10 +1,14 @@
 package com.udacity.popularmovies.detailview;
 
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.api.ReviewsUpdateListener;
 import com.udacity.popularmovies.api.TMDb;
 import com.udacity.popularmovies.model.Review;
+import com.udacity.popularmovies.utils.ErrorInfo;
 
 import java.util.List;
 
@@ -12,21 +16,68 @@ public class ReviewsPresenter implements ReviewsUpdateListener {
 
     private DetailActivity activity;
     private TMDb tmdb;
-    private View reviewsView;
+    private LinearLayout reviewsLayout;
 
     ReviewsPresenter(DetailActivity activity) {
         this.activity = activity;
         tmdb = new TMDb(activity);
         tmdb.setReviewsUpdateListener(this);
+
+        reviewsLayout = activity.findViewById(R.id.reviews);
+    }
+
+    void fetchReviews() {
+        tmdb.fetchReviews(activity.getMovieId());
     }
 
     @Override
-    public void onReviewsFetched(List<Review> ids) {
+    public void onReviewsFetched(List<Review> reviews) {
+        if (!reviews.isEmpty()) {
+            addReviewsToLayout(reviews);
+            showReviewsLayout();
+        }
+    }
 
+    private void addReviewsToLayout(List<Review> reviews) {
+        int i = 0;
+        for (Review review : reviews) {
+            addReviewView(review);
+            if (i < reviews.size() - 1) {
+                addSeparator();
+            }
+            i++;
+        }
+    }
+
+    private void addReviewView(Review review) {
+        LinearLayout reviewView =
+                (LinearLayout) activity
+                        .getLayoutInflater()
+                        .inflate(R.layout.review, reviewsLayout, false);
+
+        TextView authorView = reviewView.findViewById(R.id.author);
+        authorView.setText(review.getAuthor());
+
+        TextView contentView = reviewView.findViewById(R.id.content);
+        contentView.setText(review.getContent());
+
+        reviewsLayout.addView(reviewView);
+    }
+
+    private void addSeparator() {
+        activity.getLayoutInflater().inflate(R.layout.thin_separator, reviewsLayout);
+    }
+
+    private void showReviewsLayout() {
+        activity.findViewById(R.id.reviews_separator).setVisibility(View.VISIBLE);
+        activity.findViewById(R.id.reviews_label).setVisibility(View.VISIBLE);
+        reviewsLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onNoReviews() {
-
+        ErrorInfo.showNoInternetSnackbar(
+                reviewsLayout,
+                v -> tmdb.fetchTrailers(activity.getMovieId()));
     }
 }

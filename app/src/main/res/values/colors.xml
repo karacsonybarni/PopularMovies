@@ -9,6 +9,6 @@
 
     <color name="title_card">#009688</color>
 
-    <color name="trailers_separator">#9E9E9E</color>
-    <color name="trailer_separator">@color/black</color>
+    <color name="thick_separator">#9E9E9E</color>
+    <color name="thin_separator">@color/black</color>
 </resources>

@@ -19,12 +19,14 @@ class TrailersPresenter implements TrailersUpdateListener {
 
     private DetailActivity activity;
     private TMDb tmdb;
-    private View trailersView;
+    private LinearLayout trailersLayout;
 
     TrailersPresenter(DetailActivity activity) {
         this.activity = activity;
         tmdb = new TMDb(activity);
         tmdb.setTrailersUpdateListener(this);
+
+        trailersLayout = activity.findViewById(R.id.trailers);
     }
 
     void fetchTrailers() {
@@ -33,35 +35,31 @@ class TrailersPresenter implements TrailersUpdateListener {
 
     @Override
     public void onTrailersFetched(List<Trailer> trailers) {
-        addTrailersToLayout(trailers);
-        showTrailersLayout();
-    }
-
-    private void showTrailersLayout() {
-        activity.findViewById(R.id.trailers_separator).setVisibility(View.VISIBLE);
-        activity.findViewById(R.id.trailers_label).setVisibility(View.VISIBLE);
-        activity.findViewById(R.id.trailers).setVisibility(View.VISIBLE);
+        if (!trailers.isEmpty()) {
+            addTrailersToLayout(trailers);
+            showTrailersLayout();
+        }
     }
 
     private void addTrailersToLayout(List<Trailer> trailers) {
-        LinearLayout trailersView = activity.findViewById(R.id.trailers);
         int i = 0;
         for (Trailer trailer : trailers) {
-            addTrailerView(trailersView, trailer);
+            addTrailerView(trailer);
             if (i < trailers.size() - 1) {
-                addSeparator(trailersView);
+                addSeparator();
             }
             i++;
         }
     }
 
-    private void addTrailerView(LinearLayout trailersView, Trailer trailer) {
+    private void addTrailerView(Trailer trailer) {
         TextView trailerView =
-                (TextView) activity.getLayoutInflater()
-                        .inflate(R.layout.trailer, trailersView, false);
+                (TextView) activity
+                        .getLayoutInflater()
+                        .inflate(R.layout.trailer, trailersLayout, false);
         trailerView.setText(trailer.getName());
         trailerView.setOnClickListener(v -> playTrailer(trailer.getKey()));
-        trailersView.addView(trailerView);
+        trailersLayout.addView(trailerView);
     }
 
     private void playTrailer(String id) {
@@ -76,21 +74,20 @@ class TrailersPresenter implements TrailersUpdateListener {
         }
     }
 
-    private void addSeparator(LinearLayout trailersView) {
-        activity.getLayoutInflater().inflate(R.layout.trailer_separator, trailersView);
+    private void addSeparator() {
+        activity.getLayoutInflater().inflate(R.layout.thin_separator, trailersLayout);
+    }
+
+    private void showTrailersLayout() {
+        activity.findViewById(R.id.trailers_separator).setVisibility(View.VISIBLE);
+        activity.findViewById(R.id.trailers_label).setVisibility(View.VISIBLE);
+        trailersLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onNoTrailers() {
         ErrorInfo.showNoInternetSnackbar(
-                getTrailersView(),
+                trailersLayout,
                 v -> tmdb.fetchTrailers(activity.getMovieId()));
-    }
-
-    private View getTrailersView() {
-        if (trailersView == null) {
-            trailersView = activity.findViewById(R.id.trailers);
-        }
-        return trailersView;
     }
 }

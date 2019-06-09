@@ -28,13 +28,17 @@
     <dimen name="plot_synopsis_marginBottom">12dp</dimen>
     <dimen name="plot_synopsis_textSize">20sp</dimen>
 
-    <dimen name="trailers_separator_height">2dp</dimen>
+    <dimen name="thick_separator_height">2dp</dimen>
 
-    <dimen name="trailers_label_textSize">24sp</dimen>
-    <dimen name="trailers_label_marginTop">8dp</dimen>
+    <dimen name="separator_label_textSize">24sp</dimen>
+    <dimen name="separator_label_marginTop">12dp</dimen>
 
-    <dimen name="trailer_row_height">96dp</dimen>
+    <dimen name="trailer_row_height">80dp</dimen>
     <dimen name="trailer_drawablePadding">24dp</dimen>
     <dimen name="trailer_textSize">20sp</dimen>
+
+    <dimen name="review_marginVertical">12dp</dimen>
+    <dimen name="review_author_textSize">18sp</dimen>
+    <dimen name="review_author_marginVertical">4dp</dimen>
 
 </resources>
