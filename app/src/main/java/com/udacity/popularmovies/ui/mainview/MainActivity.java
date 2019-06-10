@@ -1,4 +1,4 @@
-package com.udacity.popularmovies.mainview;
+package com.udacity.popularmovies.ui.mainview;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -7,20 +7,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.api.MoviesUpdateListener;
 import com.udacity.popularmovies.api.TMDb;
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.data.Repository;
+import com.udacity.popularmovies.data.UpdateErrorListener;
 import com.udacity.popularmovies.utils.ErrorInfo;
+import com.udacity.popularmovies.utils.InjectorUtils;
 
-import java.util.ArrayList;
+public class MainActivity extends AppCompatActivity implements UpdateErrorListener {
 
-public class MainActivity extends AppCompatActivity implements MoviesUpdateListener {
-
-    private static final String MOVIES = "movies";
     private static final String MOVIE_SORTING = "movieSorting";
     private static final MovieSorting DEFAULT_MOVIE_SORTING = MovieSorting.SORTED_BY_POPULARITY;
 
@@ -35,16 +34,29 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
         setContentView(R.layout.activity_main);
 
         tmdb = new TMDb(this);
-        tmdb.setMoviesUpdateListener(this);
-        adapter = new MoviesAdapter(this);
+        initAdapter();
         initPosterGrid();
 
         if (savedInstanceState != null) {
             initFormSavedInstanceState(savedInstanceState);
         } else {
             movieSorting = DEFAULT_MOVIE_SORTING;
-            fetchMovies();
         }
+        fetchMovies();
+    }
+
+    private void initAdapter() {
+        adapter = new MoviesAdapter(this);
+
+        MainActivityViewModel viewModel = newViewModel();
+        viewModel.setUpdateErrorListener(this);
+        viewModel.getMovies().observe(this, movies -> adapter.updateAll(movies));
+    }
+
+    private MainActivityViewModel newViewModel() {
+        Repository repository = InjectorUtils.getRepository(this);
+        MainViewModelFactory factory = new MainViewModelFactory(repository);
+        return ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
     }
 
     private void initPosterGrid() {
@@ -66,12 +78,6 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
         if (movieSorting == null) {
             movieSorting = DEFAULT_MOVIE_SORTING;
         }
-        ArrayList<Movie> movies = savedInstanceState.getParcelableArrayList(MOVIES);
-        if (movies != null) {
-            adapter.updateAll(movies);
-        } else {
-            fetchMovies();
-        }
     }
 
     private void fetchMovies() {
@@ -88,12 +94,6 @@ public class MainActivity extends AppCompatActivity implements MoviesUpdateListe
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(MOVIE_SORTING, movieSorting);
-        outState.putParcelableArrayList(MOVIES, adapter.getMovies());
-    }
-
-    @Override
-    public void onMoviesUpdated(ArrayList<Movie> movies) {
-        adapter.updateAll(movies);
     }
 
     @Override

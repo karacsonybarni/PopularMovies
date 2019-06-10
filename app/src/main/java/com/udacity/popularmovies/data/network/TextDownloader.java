@@ -1,4 +1,4 @@
-package com.udacity.popularmovies.network;
+package com.udacity.popularmovies.data.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -8,21 +8,19 @@ import androidx.fragment.app.FragmentActivity;
 
 public class TextDownloader implements DownloadCallback<String> {
 
-    private FragmentActivity activity;
     private NetworkFragment networkFragment;
     private DownloadListener downloadListener;
+    private ConnectivityManager connectivityManager;
 
     public TextDownloader(FragmentActivity activity, DownloadListener downloadListener) {
-        this.activity = activity;
         this.downloadListener = downloadListener;
-        networkFragment =
-                NetworkFragment.getInstance(
-                        activity.getSupportFragmentManager(),
-                        this);
+        networkFragment = NetworkFragment.getInstance(activity.getSupportFragmentManager());
+        connectivityManager =
+                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     public void download(String url) {
-        networkFragment.startDownload(url);
+        networkFragment.startDownload(url, this);
     }
 
     @Override
@@ -36,8 +34,6 @@ public class TextDownloader implements DownloadCallback<String> {
 
     @Override
     public NetworkInfo getActiveNetworkInfo() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         return connectivityManager.getActiveNetworkInfo();
     }
 }

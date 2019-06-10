@@ -1,4 +1,4 @@
-package com.udacity.popularmovies.detailview;
+package com.udacity.popularmovies.ui.detailview;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.api.TMDb;
 import com.udacity.popularmovies.api.TrailersUpdateListener;
 import com.udacity.popularmovies.model.Trailer;
-import com.udacity.popularmovies.utils.ErrorInfo;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ class TrailersPresenter implements TrailersUpdateListener {
 
     TrailersPresenter(DetailActivity activity) {
         this.activity = activity;
-        tmdb = new TMDb(activity);
+        tmdb = activity.getTmdb();
         tmdb.setTrailersUpdateListener(this);
 
         trailersLayout = activity.findViewById(R.id.trailers);
@@ -86,8 +85,6 @@ class TrailersPresenter implements TrailersUpdateListener {
 
     @Override
     public void onNoTrailers() {
-        ErrorInfo.showNoInternetSnackbar(
-                trailersLayout,
-                v -> tmdb.fetchTrailers(activity.getMovieId()));
+        activity.onNoData();
     }
 }

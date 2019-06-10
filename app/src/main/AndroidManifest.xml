@@ -15,8 +15,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name=".detailview.DetailActivity" />
-        <activity android:name=".mainview.MainActivity">
+        <activity android:name=".ui.detailview.DetailActivity" />
+        <activity android:name=".ui.mainview.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,4 +1,4 @@
-package com.udacity.popularmovies.mainview;
+package com.udacity.popularmovies.ui.mainview;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,21 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.detailview.DetailActivity;
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.data.database.Movie;
+import com.udacity.popularmovies.ui.detailview.DetailActivity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterViewHolder> {
 
     private Context context;
-    private ArrayList<Movie> movies;
+    private List<Movie> movies;
 
     MoviesAdapter(Context context) {
         this.context = context;
     }
 
-    void updateAll(ArrayList<Movie> movies) {
+    void updateAll(List<Movie> movies) {
         this.movies = movies;
         if (movies != null) {
             notifyDataSetChanged();
@@ -58,7 +58,7 @@ class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterViewHolder>
     private View.OnClickListener newClickListener(Movie movie) {
         return v -> {
             Intent startDetailActivityIntent = new Intent(context, DetailActivity.class);
-            startDetailActivityIntent.putExtra(DetailActivity.MOVIE_EXTRA, movie);
+            startDetailActivityIntent.putExtra(DetailActivity.MOVIE_EXTRA, movie.getId());
             context.startActivity(startDetailActivityIntent);
         };
     }
@@ -68,7 +68,7 @@ class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterViewHolder>
         return movies != null ? movies.size() : 0;
     }
 
-    ArrayList<Movie> getMovies() {
+    List<Movie> getMovies() {
         return movies;
     }
 

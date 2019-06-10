@@ -3,7 +3,7 @@ package com.udacity.popularmovies.api;
 import androidx.annotation.NonNull;
 
 import com.udacity.popularmovies.model.Trailer;
-import com.udacity.popularmovies.network.DownloadListener;
+import com.udacity.popularmovies.data.network.DownloadListener;
 import com.udacity.popularmovies.utils.json.Parser;
 
 import org.json.JSONException;

@@ -1,6 +1,6 @@
 package com.udacity.popularmovies.utils.json;
 
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.data.database.Movie;
 import com.udacity.popularmovies.model.Review;
 import com.udacity.popularmovies.model.Trailer;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Parser {
 
-    private static Parser INSTANCE;
+    private static Parser sInstance;
 
     private MoviesParser moviesParser;
     private TrailersParser trailersParser;
@@ -24,10 +24,10 @@ public class Parser {
     }
 
     private static Parser getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new Parser();
+        if (sInstance == null) {
+            sInstance = new Parser();
         }
-        return INSTANCE;
+        return sInstance;
     }
 
     public static ArrayList<Movie> parseMovies(String moviesJSON) throws JSONException {

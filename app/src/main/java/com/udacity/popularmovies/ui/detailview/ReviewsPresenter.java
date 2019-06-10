@@ -1,4 +1,4 @@
-package com.udacity.popularmovies.detailview;
+package com.udacity.popularmovies.ui.detailview;
 
 import android.view.View;
 import android.widget.LinearLayout;
@@ -8,7 +8,6 @@ import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.api.ReviewsUpdateListener;
 import com.udacity.popularmovies.api.TMDb;
 import com.udacity.popularmovies.model.Review;
-import com.udacity.popularmovies.utils.ErrorInfo;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class ReviewsPresenter implements ReviewsUpdateListener {
 
     ReviewsPresenter(DetailActivity activity) {
         this.activity = activity;
-        tmdb = new TMDb(activity);
+        tmdb = activity.getTmdb();
         tmdb.setReviewsUpdateListener(this);
 
         reviewsLayout = activity.findViewById(R.id.reviews);
@@ -76,8 +75,6 @@ public class ReviewsPresenter implements ReviewsUpdateListener {
 
     @Override
     public void onNoReviews() {
-        ErrorInfo.showNoInternetSnackbar(
-                reviewsLayout,
-                v -> tmdb.fetchTrailers(activity.getMovieId()));
+        activity.onNoData();
     }
 }

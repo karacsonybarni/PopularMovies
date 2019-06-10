@@ -1,4 +1,4 @@
-package com.udacity.popularmovies.network;
+package com.udacity.popularmovies.data.network;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,11 +6,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.udacity.popularmovies.mainview.MainActivity;
+import com.udacity.popularmovies.Initializer;
+import com.udacity.popularmovies.data.database.Database;
+import com.udacity.popularmovies.ui.mainview.MainActivity;
 import com.udacity.popularmovies.R;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +31,13 @@ public class DownloadTaskTest {
 
     @Before
     public void setup() {
+        Initializer.initPicasso();
         scenario = ActivityScenario.launch(MainActivity.class);
+    }
+
+    @After
+    public void tearDown() {
+        Database.getInstance(ApplicationProvider.getApplicationContext()).close();
     }
 
     @Test

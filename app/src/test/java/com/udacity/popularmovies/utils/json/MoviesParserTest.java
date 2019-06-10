@@ -1,6 +1,6 @@
 package com.udacity.popularmovies.utils.json;
 
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.data.database.Movie;
 
 import org.json.JSONException;
 import org.junit.Test;

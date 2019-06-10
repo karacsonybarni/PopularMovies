@@ -3,46 +3,33 @@ package com.udacity.popularmovies.api;
 import androidx.fragment.app.FragmentActivity;
 
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.network.TextDownloader;
+import com.udacity.popularmovies.data.network.TextDownloader;
 
 public class TMDb {
 
     private FragmentActivity activity;
-    private TextDownloader moviesDownloader;
+    private MoviesNetworkDataSource moviesNetworkDataSource;
     private TextDownloader trailersDownloader;
     private TextDownloader reviewsDownloader;
 
     private String apiKey;
-    private String popularMoviesUrl;
-    private String topRatedMoviesUrl;
 
     public TMDb(FragmentActivity activity) {
         this.activity = activity;
+        moviesNetworkDataSource = MoviesNetworkDataSource.getInstance(activity);
         initUrls();
     }
 
     private void initUrls() {
         apiKey = activity.getString(R.string.api_key);
-        popularMoviesUrl = activity.getString(R.string.popular_movies_query, apiKey);
-        topRatedMoviesUrl = activity.getString(R.string.top_rated_movies_query, apiKey);
-    }
-
-    public void setMoviesUpdateListener(MoviesUpdateListener moviesUpdateListener) {
-        moviesDownloader =
-                new TextDownloader(activity, newMoviesDownloadListener(moviesUpdateListener));
-    }
-
-    MoviesDownloadListener newMoviesDownloadListener(
-            MoviesUpdateListener moviesUpdateListener) {
-        return new MoviesDownloadListener(moviesUpdateListener);
     }
 
     public void fetchPopularMovies() {
-        moviesDownloader.download(popularMoviesUrl);
+        moviesNetworkDataSource.fetchPopularMovies();
     }
 
     public void fetchTopRatedMovies() {
-        moviesDownloader.download(topRatedMoviesUrl);
+        moviesNetworkDataSource.fetchTopRatedMovies();
     }
 
     public void setTrailersUpdateListener(TrailersUpdateListener movieDetailsListener) {

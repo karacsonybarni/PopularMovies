@@ -1,10 +1,9 @@
 package com.udacity.popularmovies.api;
 
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.data.database.Movie;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public interface MoviesUpdateListener {
-    void onMoviesUpdated(ArrayList<Movie> movies);
-    void onNoMovies();
+interface MoviesUpdateListener {
+    void onMoviesUpdated(List<Movie> movies);
 }

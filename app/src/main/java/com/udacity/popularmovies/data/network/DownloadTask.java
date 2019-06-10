@@ -1,4 +1,4 @@
-package com.udacity.popularmovies.network;
+package com.udacity.popularmovies.data.network;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

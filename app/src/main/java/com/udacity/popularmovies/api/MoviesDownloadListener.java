@@ -2,8 +2,8 @@ package com.udacity.popularmovies.api;
 
 import androidx.annotation.NonNull;
 
-import com.udacity.popularmovies.model.Movie;
-import com.udacity.popularmovies.network.DownloadListener;
+import com.udacity.popularmovies.data.network.DownloadListener;
+import com.udacity.popularmovies.data.database.Movie;
 import com.udacity.popularmovies.utils.json.Parser;
 
 import org.json.JSONException;
@@ -31,6 +31,6 @@ class MoviesDownloadListener implements DownloadListener {
 
     @Override
     public void onNoData() {
-        listener.onNoMovies();
+        listener.onMoviesUpdated(null);
     }
 }

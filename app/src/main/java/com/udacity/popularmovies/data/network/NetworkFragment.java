@@ -1,4 +1,4 @@
-package com.udacity.popularmovies.network;
+package com.udacity.popularmovies.data.network;
 
 import android.os.Bundle;
 
@@ -13,15 +13,10 @@ public class NetworkFragment extends Fragment {
 
     private static final String TAG = "NetworkFragment";
 
-    private DownloadCallback<String> callback;
     private DownloadTask downloadTask;
 
-    private NetworkFragment() {
-    }
-
     static NetworkFragment getInstance(
-            FragmentManager fragmentManager,
-            DownloadCallback<String> downloadCallback) {
+            FragmentManager fragmentManager) {
 
         // Recover NetworkFragment in case we are re-creating the Activity due to a config change.
         // This is necessary because NetworkFragment might have a task that began running before
@@ -33,7 +28,6 @@ public class NetworkFragment extends Fragment {
             networkFragment = new NetworkFragment();
             fragmentManager.beginTransaction().add(networkFragment, TAG).commit();
         }
-        networkFragment.callback = downloadCallback;
         return networkFragment;
     }
 
@@ -41,13 +35,6 @@ public class NetworkFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        // Clear reference to host Activity to avoid memory leak.
-        callback = null;
     }
 
     @Override
@@ -60,9 +47,9 @@ public class NetworkFragment extends Fragment {
     /**
      * Start non-blocking execution of DownloadTask.
      */
-    void startDownload(String urlString) {
+    void startDownload(String urlString, DownloadCallback<String> downloadCallback) {
         cancelDownload();
-        downloadTask = new DownloadTask(callback);
+        downloadTask = new DownloadTask(downloadCallback);
         downloadTask.execute(urlString);
     }
 
