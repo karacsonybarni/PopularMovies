@@ -5,21 +5,28 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import java.util.List;
 
 @Dao
-public interface MovieDao {
+public abstract class MovieDao {
 
     @Query("SELECT * FROM movie")
-    LiveData<List<Movie>> getMovies();
+    public abstract LiveData<List<Movie>> getMovies();
 
     @Query("SELECT * FROM movie WHERE id = :id")
-    LiveData<Movie> getMovie(int id);
+    public abstract LiveData<Movie> getMovie(int id);
+
+    @Transaction
+    public void updateMovies(List<Movie> movies) {
+        deleteAllMovies();
+        bulkInsert(movies);
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void bulkInsert(List<Movie> movies);
+    abstract void bulkInsert(List<Movie> movies);
 
     @Query("DELETE FROM movie")
-    void deleteAllMovies();
+    abstract void deleteAllMovies();
 }

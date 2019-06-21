@@ -9,7 +9,6 @@ import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.data.database.Movie;
 import com.udacity.popularmovies.data.network.TextDownloader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MoviesNetworkDataSource implements MoviesUpdateListener {
@@ -55,5 +54,9 @@ public class MoviesNetworkDataSource implements MoviesUpdateListener {
     @Override
     public void onMoviesUpdated(List<Movie> movies) {
         downloadedMovies.setValue(movies);
+    }
+
+    public void close() {
+        sInstance = null;
     }
 }

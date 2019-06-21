@@ -9,13 +9,13 @@ import com.udacity.popularmovies.data.database.Movie;
 
 class DetailActivityViewModel extends ViewModel {
 
-    private Repository repository;
+    private LiveData<Movie> movie;
 
-    DetailActivityViewModel(@NonNull Repository repository) {
-        this.repository = repository;
+    DetailActivityViewModel(@NonNull Repository repository, int movieId) {
+        movie = repository.getMovie(movieId);
     }
 
-    LiveData<Movie> getMovie(int id) {
-        return repository.getMovie(id);
+    LiveData<Movie> getMovie() {
+        return movie;
     }
 }

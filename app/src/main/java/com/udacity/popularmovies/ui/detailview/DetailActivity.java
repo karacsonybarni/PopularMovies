@@ -51,10 +51,10 @@ public class DetailActivity extends AppCompatActivity {
 
     private void initMovie() {
         DetailActivityViewModel viewModel = newViewModel();
-        viewModel.getMovie(movieId).observe(this, new Observer<Movie>() {
+        viewModel.getMovie().observe(this, new Observer<Movie>() {
             @Override
             public void onChanged(Movie movie) {
-                viewModel.getMovie(movieId).removeObserver(this);
+                viewModel.getMovie().removeObserver(this);
 
                 DetailActivity.this.movie = movie;
                 populateViews();
@@ -65,7 +65,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private DetailActivityViewModel newViewModel() {
         Repository repository = InjectorUtils.getRepository(this);
-        DetailViewModelFactory factory = new DetailViewModelFactory(repository);
+        DetailViewModelFactory factory = new DetailViewModelFactory(repository, movieId);
         return ViewModelProviders.of(this, factory).get(DetailActivityViewModel.class);
     }
 

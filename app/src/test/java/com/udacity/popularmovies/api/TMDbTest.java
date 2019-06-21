@@ -5,15 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.udacity.popularmovies.Terminator;
 import com.udacity.popularmovies.Initializer;
+import com.udacity.popularmovies.TestData;
 import com.udacity.popularmovies.data.Repository;
-import com.udacity.popularmovies.data.database.Database;
 import com.udacity.popularmovies.data.database.Movie;
 import com.udacity.popularmovies.ui.detailview.DetailActivity;
 import com.udacity.popularmovies.ui.mainview.MainActivity;
@@ -21,6 +23,7 @@ import com.udacity.popularmovies.utils.InjectorUtils;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,24 +36,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class TMDbTest {
 
-    private static final int ALADDIN_ID = 420817;
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+
     private Movie movie;
 
     private CountDownLatch signal = new CountDownLatch(1);
 
     @Before
     public void setup() {
+        Initializer.initDatabase(ApplicationProvider.getApplicationContext());
         Initializer.initPicasso();
-        Database.getInstance(ApplicationProvider.getApplicationContext());
+        movie = TestData.getTestMovie();
     }
 
     @After
     public void tearDown() {
-        Database.getInstance(ApplicationProvider.getApplicationContext()).close();
+        Terminator.closeRepository();
     }
 
     @Test
-    public void fetchPopularMoviesJson() {
+    public void fetchMovies() {
         ActivityScenario.launch(MainActivity.class).onActivity(activity -> {
             getMovies(activity).observe(activity, movies -> {
                 assertThat(movies).isNotEmpty();
@@ -77,6 +83,12 @@ public class TMDbTest {
             @Override
             public void fetchTrailers(int id) {
                 super.fetchTrailers(id);
+                waitForSignal();
+            }
+
+            @Override
+            public void fetchReviews(int id) {
+                super.fetchReviews(id);
                 waitForSignal();
             }
 
@@ -127,7 +139,8 @@ public class TMDbTest {
 
     @Test
     public void fetchTrailers() {
-        onDetailsActivity(activity -> {
+        fetchMovies();
+        launchDetailsActivity(activity -> {
             DetailActivity detailActivity = (DetailActivity) activity;
             insertMoviesIntoDatabase(detailActivity);
             spyTMDb(detailActivity).fetchTrailers(detailActivity.getMovieId());
@@ -142,18 +155,17 @@ public class TMDbTest {
 
     @Test
     public void fetchReviews() {
-        onDetailsActivity(activity -> {
+        fetchMovies();
+        launchDetailsActivity(activity -> {
             DetailActivity detailActivity = (DetailActivity) activity;
             insertMoviesIntoDatabase(detailActivity);
             spyTMDb(detailActivity).fetchReviews(detailActivity.getMovieId());
         });
     }
 
-    private void onDetailsActivity(ActivityScenario.ActivityAction<Activity> action) {
+    private void launchDetailsActivity(ActivityScenario.ActivityAction<Activity> action) {
         Context context = ApplicationProvider.getApplicationContext();
         Intent startActivityIntent = new Intent(context, DetailActivity.class);
-        movie = new Movie();
-        movie.setId(ALADDIN_ID);
         startActivityIntent.putExtra(DetailActivity.MOVIE_EXTRA, movie.getId());
         ActivityScenario.launch(startActivityIntent).onActivity(action);
     }

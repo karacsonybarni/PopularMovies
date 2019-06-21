@@ -28,10 +28,16 @@ public abstract class Database extends RoomDatabase {
     }
 
     private static Database createInstance(Context context) {
-        return Room
-                .databaseBuilder(context.getApplicationContext(), Database.class, DATABASE_NAME)
-                .build();
+        return getDatabaseBuilder(context).build();
+    }
+
+    public static RoomDatabase.Builder<Database> getDatabaseBuilder(Context context) {
+        return Room.databaseBuilder(context.getApplicationContext(), Database.class, DATABASE_NAME);
     }
 
     public abstract MovieDao movieDao();
+
+    public static void setInstance(Database instance) {
+        sInstance = instance;
+    }
 }

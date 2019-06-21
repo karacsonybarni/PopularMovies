@@ -1,9 +1,13 @@
 package com.udacity.popularmovies.data;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.udacity.popularmovies.api.MoviesNetworkDataSource;
-import com.udacity.popularmovies.data.database.MovieDao;
+import com.udacity.popularmovies.data.database.Database;
 import com.udacity.popularmovies.data.database.Movie;
 import com.udacity.popularmovies.utils.AppExecutors;
 
@@ -14,46 +18,93 @@ public class Repository {
     private static Repository sInstance;
     private static final Object LOCK = new Object();
 
-    private MovieDao movieDao;
+    private Database database;
+    private MoviesNetworkDataSource moviesNetworkDataSource;
+    private AppExecutors executors;
+    private Observer<? super List<Movie>> networkDataObserver;
     private UpdateErrorListener updateErrorListener;
 
 
-    private Repository(MovieDao movieDao,
+    private Repository(Database database,
                        MoviesNetworkDataSource moviesNetworkDataSource,
                        AppExecutors executors) {
-        this.movieDao = movieDao;
+        this.database = database;
+        this.moviesNetworkDataSource = moviesNetworkDataSource;
+        this.executors = executors;
 
-        LiveData<List<Movie>> networkData = moviesNetworkDataSource.getMovies();
-        networkData.observeForever(movies ->
-                executors.diskIO().execute(() -> {
-                    if (movies != null && !movies.isEmpty()) {
-                        movieDao.deleteAllMovies();
-                        movieDao.bulkInsert(movies);
-                    } else {
-                        if (updateErrorListener != null) {
-                            updateErrorListener.onNoMovies();
-                        }
-                    }
-                }));
+        networkDataObserver = newNetworkDataObserver();
+        moviesNetworkDataSource.getMovies().observeForever(networkDataObserver);
     }
 
-    public static Repository getInstance(MovieDao movieDao,
+    private Observer<? super List<Movie>> newNetworkDataObserver() {
+        return movies ->
+                executors.diskIO().execute(() -> {
+                    if (movies != null && !movies.isEmpty()) {
+                        tryToUpdateMovies(movies);
+                    } else {
+                        notifyUpdateErrorListener();
+                    }
+                });
+    }
+
+    private void tryToUpdateMovies(List<Movie> movies) {
+        try {
+            database.movieDao().updateMovies(movies);
+        } catch (IllegalStateException ignored) {
+            executors.mainThread().execute(this::close);
+        }
+    }
+
+    public void close() {
+        closeNetworkDataSource();
+        database.close();
+        sInstance = null;
+    }
+
+    private void closeNetworkDataSource() {
+        removeNetworkDataSourceObserver();
+        if (moviesNetworkDataSource != null) {
+            moviesNetworkDataSource.close();
+        }
+    }
+
+    private void removeNetworkDataSourceObserver() {
+        MutableLiveData<List<Movie>> moviesLiveData =
+                moviesNetworkDataSource != null ? moviesNetworkDataSource.getMovies() : null;
+        if (moviesLiveData != null) {
+            moviesLiveData.removeObserver(networkDataObserver);
+        }
+    }
+
+    private void notifyUpdateErrorListener() {
+        if (updateErrorListener != null) {
+            updateErrorListener.onNoMovies();
+        }
+    }
+
+    @NonNull
+    public static Repository getInstance(Database database,
                                          MoviesNetworkDataSource moviesNetworkDataSource,
                                          AppExecutors executors) {
         if (sInstance == null) {
             synchronized (LOCK) {
-                sInstance = new Repository(movieDao, moviesNetworkDataSource, executors);
+                sInstance = new Repository(database, moviesNetworkDataSource, executors);
             }
         }
         return sInstance;
     }
 
+    @Nullable
+    public static Repository getInstance() {
+        return sInstance;
+    }
+
     public LiveData<List<Movie>> getMovies() {
-        return movieDao.getMovies();
+        return database.movieDao().getMovies();
     }
 
     public LiveData<Movie> getMovie(int id) {
-        return movieDao.getMovie(id);
+        return database.movieDao().getMovie(id);
     }
 
     public void setUpdateErrorListener(UpdateErrorListener updateErrorListener) {

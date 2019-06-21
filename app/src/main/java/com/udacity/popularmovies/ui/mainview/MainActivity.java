@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
 
         MainActivityViewModel viewModel = newViewModel();
         viewModel.setUpdateErrorListener(this);
-        viewModel.getMovies().observe(this, movies -> adapter.updateAll(movies));
+        viewModel.getMovies().observe(
+                this,
+                movies -> runOnUiThread(() ->  adapter.updateAll(movies)));
     }
 
     private MainActivityViewModel newViewModel() {
