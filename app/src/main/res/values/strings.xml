@@ -11,7 +11,6 @@
     
     <string name="no_internet_error">No internet connection</string>
     <string name="retry">Retry</string>
-    <string name="incorrect_json">Failed to process the data from the server</string>
 
     <string name="action_sort_by_popularity">Sort by popularity</string>
     <string name="action_sort_by_rating">Sort by rating</string>

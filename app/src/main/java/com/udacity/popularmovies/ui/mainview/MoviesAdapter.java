@@ -68,10 +68,6 @@ class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterViewHolder>
         return movies != null ? movies.size() : 0;
     }
 
-    List<Movie> getMovies() {
-        return movies;
-    }
-
     class PosterViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView posterView;
