@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
     private static final String MOVIE_SORTING = "movieSorting";
     private static final MovieSorting DEFAULT_MOVIE_SORTING = MovieSorting.SORTED_BY_POPULARITY;
 
+    private MainActivityViewModel viewModel;
     private MovieSorting movieSorting;
     private TMDb tmdb;
     private MoviesAdapter adapter;
@@ -34,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
         setContentView(R.layout.activity_main);
 
         tmdb = new TMDb(this);
-        initAdapter();
+        viewModel = newViewModel();
+        adapter = new MoviesAdapter(this);
         initPosterGrid();
 
         if (savedInstanceState != null) {
@@ -42,23 +44,16 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
         } else {
             movieSorting = DEFAULT_MOVIE_SORTING;
         }
-        fetchMovies();
-    }
-
-    private void initAdapter() {
-        adapter = new MoviesAdapter(this);
-
-        MainActivityViewModel viewModel = newViewModel();
-        viewModel.setUpdateErrorListener(this);
-        viewModel.getMovies().observe(
-                this,
-                movies -> runOnUiThread(() ->  adapter.updateAll(movies)));
+        showMovies();
     }
 
     private MainActivityViewModel newViewModel() {
         Repository repository = InjectorUtils.getRepository(this);
         MainViewModelFactory factory = new MainViewModelFactory(repository);
-        return ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
+        MainActivityViewModel viewModel =
+                ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
+        viewModel.setUpdateErrorListener(this);
+        return viewModel;
     }
 
     private void initPosterGrid() {
@@ -82,13 +77,16 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
         }
     }
 
-    private void fetchMovies() {
+    private void showMovies() {
         switch (movieSorting) {
             case SORTED_BY_POPULARITY:
-                tmdb.fetchPopularMovies();
+                showPopularMovies();
                 return;
             case SORTED_BY_RATING:
-                tmdb.fetchTopRatedMovies();
+                showTopRatedMovies();
+                return;
+            case FAVORITES:
+                showFavoriteMovies();
         }
     }
 
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
 
     @Override
     public void onNoMovies() {
-        ErrorInfo.showNoInternetSnackbar(posterGrid, v -> fetchMovies());
+        ErrorInfo.showNoInternetSnackbar(posterGrid, v -> showMovies());
     }
 
     @Override
@@ -114,15 +112,60 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_sort_by_popularity) {
-            movieSorting = MovieSorting.SORTED_BY_POPULARITY;
-            tmdb.fetchPopularMovies();
+            showPopularMovies();
             return true;
         }
         if (id == R.id.action_sort_by_rating) {
-            movieSorting = MovieSorting.SORTED_BY_RATING;
-            tmdb.fetchTopRatedMovies();
+            showTopRatedMovies();
+            return true;
+        }
+        if (id == R.id.action_favorites) {
+            showFavoriteMovies();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showPopularMovies() {
+        movieSorting = MovieSorting.SORTED_BY_POPULARITY;
+        observeAllMovies();
+        tmdb.fetchPopularMovies();
+    }
+
+    private void showTopRatedMovies() {
+        movieSorting = MovieSorting.SORTED_BY_RATING;
+        observeAllMovies();
+        tmdb.fetchTopRatedMovies();
+    }
+
+    private void showFavoriteMovies() {
+        movieSorting = MovieSorting.FAVORITES;
+        observeFavoriteMovies();
+    }
+
+    private void observeAllMovies() {
+        removeObservers();
+        viewModel.getMovies().observe(
+                this,
+                movies -> runOnUiThread(() -> adapter.updateAll(movies)));
+    }
+
+    private void observeFavoriteMovies() {
+        removeObservers();
+        viewModel.getFavoriteMovies().observe(
+                this,
+                movies -> runOnUiThread(() -> adapter.updateAll(movies)));
+    }
+
+    @Override
+    protected void onDestroy() {
+        removeObservers();
+        viewModel.removeUpdateErrorListener();
+        super.onDestroy();
+    }
+
+    private void removeObservers() {
+        viewModel.getMovies().removeObservers(this);
+        viewModel.getFavoriteMovies().removeObservers(this);
     }
 }

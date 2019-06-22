@@ -24,6 +24,10 @@
     <dimen name="rating_marginTop">12dp</dimen>
     <dimen name="rating_textSize">18sp</dimen>
 
+    <dimen name="favorite_button_height">56dp</dimen>
+    <dimen name="favorite_button_marginTop">12dp</dimen>
+    <dimen name="favorite_button_paddingHorizontal">24dp</dimen>
+
     <dimen name="plot_synopsis_marginTop">24dp</dimen>
     <dimen name="plot_synopsis_marginBottom">12dp</dimen>
     <dimen name="plot_synopsis_textSize">20sp</dimen>

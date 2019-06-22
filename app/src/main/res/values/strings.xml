@@ -15,8 +15,11 @@
 
     <string name="action_sort_by_popularity">Sort by popularity</string>
     <string name="action_sort_by_rating">Sort by rating</string>
+    <string name="action_favorites">Show favorites</string>
 
     <string name="rating">%1$.1f/10</string>
+    <string name="favorite_button_unchecked">Mark as\nfavorite</string>
+    <string name="favorite_button_checked">Already a\nfavorite</string>
     <string name="trailers_label">Trailers</string>
     <string name="reviews_label">Reviews</string>
 </resources>

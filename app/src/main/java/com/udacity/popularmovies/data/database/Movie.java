@@ -14,6 +14,7 @@ public class Movie {
     private String plotSynopsis;
     private double rating;
     private String releaseDate;
+    private boolean favorite;
 
     public int getId() {
         return id;
@@ -69,5 +70,13 @@ public class Movie {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
     }
 }

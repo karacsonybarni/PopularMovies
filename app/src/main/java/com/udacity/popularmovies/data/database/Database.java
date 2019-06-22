@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@androidx.room.Database(entities = {Movie.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {Movie.class}, version = 2, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     private static final Object LOCK = new Object();
@@ -32,7 +32,9 @@ public abstract class Database extends RoomDatabase {
     }
 
     public static RoomDatabase.Builder<Database> getDatabaseBuilder(Context context) {
-        return Room.databaseBuilder(context.getApplicationContext(), Database.class, DATABASE_NAME);
+        return Room
+                .databaseBuilder(context.getApplicationContext(), Database.class, DATABASE_NAME)
+                .fallbackToDestructiveMigration();
     }
 
     public abstract MovieDao movieDao();

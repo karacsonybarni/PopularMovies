@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer;
 import com.udacity.popularmovies.api.MoviesNetworkDataSource;
 import com.udacity.popularmovies.data.database.Database;
 import com.udacity.popularmovies.data.database.Movie;
+import com.udacity.popularmovies.data.database.MovieDao;
 import com.udacity.popularmovies.utils.AppExecutors;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class Repository {
     private static final Object LOCK = new Object();
 
     private Database database;
+    private MovieDao movieDao;
     private MoviesNetworkDataSource moviesNetworkDataSource;
     private AppExecutors executors;
     private Observer<? super List<Movie>> networkDataObserver;
@@ -31,6 +33,7 @@ public class Repository {
         this.database = database;
         this.moviesNetworkDataSource = moviesNetworkDataSource;
         this.executors = executors;
+        movieDao = database.movieDao();
 
         networkDataObserver = newNetworkDataObserver();
         moviesNetworkDataSource.getMovies().observeForever(networkDataObserver);
@@ -49,13 +52,14 @@ public class Repository {
 
     private void tryToUpdateMovies(List<Movie> movies) {
         try {
-            database.movieDao().updateMovies(movies);
+            movieDao.updateMovies(movies);
         } catch (IllegalStateException ignored) {
             executors.mainThread().execute(this::close);
         }
     }
 
     public void close() {
+        updateErrorListener = null;
         closeNetworkDataSource();
         database.close();
         sInstance = null;
@@ -100,14 +104,22 @@ public class Repository {
     }
 
     public LiveData<List<Movie>> getMovies() {
-        return database.movieDao().getMovies();
+        return movieDao.getMovies();
     }
 
     public LiveData<Movie> getMovie(int id) {
-        return database.movieDao().getMovie(id);
+        return movieDao.getMovie(id);
     }
 
     public void setUpdateErrorListener(UpdateErrorListener updateErrorListener) {
         this.updateErrorListener = updateErrorListener;
+    }
+
+    public void update(Movie movie) {
+        executors.diskIO().execute(() -> movieDao.insert(movie));
+    }
+
+    public LiveData<List<Movie>> getFavoriteMovies() {
+        return movieDao.getFavoriteMovies();
     }
 }
