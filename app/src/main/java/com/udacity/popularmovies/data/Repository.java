@@ -103,8 +103,16 @@ public class Repository {
         return sInstance;
     }
 
-    public LiveData<List<Movie>> getMovies() {
-        return movieDao.getMovies();
+    public LiveData<List<Movie>> getPopularMovies() {
+        return movieDao.getPopularMovies();
+    }
+
+    public LiveData<List<Movie>> getTopRatedMovies() {
+        return movieDao.getTopRatedMovies();
+    }
+
+    public LiveData<List<Movie>> getFavoriteMovies() {
+        return movieDao.getFavoriteMovies();
     }
 
     public LiveData<Movie> getMovie(int id) {
@@ -117,9 +125,5 @@ public class Repository {
 
     public void update(Movie movie) {
         executors.diskIO().execute(() -> movieDao.insert(movie));
-    }
-
-    public LiveData<List<Movie>> getFavoriteMovies() {
-        return movieDao.getFavoriteMovies();
     }
 }

@@ -1,6 +1,7 @@
 package com.udacity.popularmovies.ui.mainview;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -13,18 +14,26 @@ import java.util.List;
 class MainActivityViewModel extends ViewModel {
 
     private Repository repository;
-    private LiveData<List<Movie>> allMovies;
+    private LiveData<List<Movie>> popularMovies;
+    private LiveData<List<Movie>> topRatedMovies;
     private LiveData<List<Movie>> favoriteMovies;
 
     MainActivityViewModel(@NonNull Repository repository) {
         this.repository = repository;
     }
 
-    LiveData<List<Movie>> getMovies() {
-        if (allMovies == null) {
-            allMovies = repository.getMovies();
+    LiveData<List<Movie>> getPopularMovies() {
+        if (popularMovies == null) {
+            popularMovies = repository.getPopularMovies();
         }
-        return allMovies;
+        return popularMovies;
+    }
+
+    LiveData<List<Movie>> getTopRatedMovies() {
+        if (topRatedMovies == null) {
+            topRatedMovies = repository.getTopRatedMovies();
+        }
+        return topRatedMovies;
     }
 
     LiveData<List<Movie>> getFavoriteMovies() {
@@ -45,5 +54,17 @@ class MainActivityViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         removeUpdateErrorListener();
+    }
+
+    void removeObservers(LifecycleOwner lifecycleOwner) {
+        if (popularMovies != null) {
+            popularMovies.removeObservers(lifecycleOwner);
+        }
+        if (topRatedMovies != null) {
+            topRatedMovies.removeObservers(lifecycleOwner);
+        }
+        if (favoriteMovies != null) {
+            favoriteMovies.removeObservers(lifecycleOwner);
+        }
     }
 }

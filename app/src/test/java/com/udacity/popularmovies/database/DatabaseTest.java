@@ -51,7 +51,7 @@ public class DatabaseTest {
         ActivityScenario.launch(MainActivity.class).onActivity(activity -> {
             insertMovie(createMovie());
 
-            getDao().getMovies().observe(activity, movies -> {
+            getDao().getPopularMovies().observe(activity, movies -> {
                 if (movies.size() != 1) {
                     return;
                 }

@@ -128,14 +128,28 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
 
     private void showPopularMovies() {
         movieSorting = MovieSorting.SORTED_BY_POPULARITY;
-        observeAllMovies();
+        observePopularMovies();
         tmdb.fetchPopularMovies();
+    }
+
+    private void observePopularMovies() {
+        viewModel.removeObservers(this);
+        viewModel.getPopularMovies().observe(
+                this,
+                movies -> runOnUiThread(() -> adapter.updateAll(movies)));
     }
 
     private void showTopRatedMovies() {
         movieSorting = MovieSorting.SORTED_BY_RATING;
-        observeAllMovies();
+        observeTopRatedMovies();
         tmdb.fetchTopRatedMovies();
+    }
+
+    private void observeTopRatedMovies() {
+        viewModel.removeObservers(this);
+        viewModel.getTopRatedMovies().observe(
+                this,
+                movies -> runOnUiThread(() -> adapter.updateAll(movies)));
     }
 
     private void showFavoriteMovies() {
@@ -143,15 +157,8 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
         observeFavoriteMovies();
     }
 
-    private void observeAllMovies() {
-        removeObservers();
-        viewModel.getMovies().observe(
-                this,
-                movies -> runOnUiThread(() -> adapter.updateAll(movies)));
-    }
-
     private void observeFavoriteMovies() {
-        removeObservers();
+        viewModel.removeObservers(this);
         viewModel.getFavoriteMovies().observe(
                 this,
                 movies -> runOnUiThread(() -> adapter.updateAll(movies)));
@@ -159,13 +166,8 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
 
     @Override
     protected void onDestroy() {
-        removeObservers();
+        viewModel.removeObservers(this);
         viewModel.removeUpdateErrorListener();
         super.onDestroy();
-    }
-
-    private void removeObservers() {
-        viewModel.getMovies().removeObservers(this);
-        viewModel.getFavoriteMovies().removeObservers(this);
     }
 }

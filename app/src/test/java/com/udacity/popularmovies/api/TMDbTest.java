@@ -58,7 +58,7 @@ public class TMDbTest {
     @Test
     public void fetchMovies() {
         ActivityScenario.launch(MainActivity.class).onActivity(activity -> {
-            getMovies(activity).observe(activity, movies -> {
+            getPopularMovies(activity).observe(activity, movies -> {
                 assertThat(movies).isNotEmpty();
                 signal.countDown();
             });
@@ -67,9 +67,9 @@ public class TMDbTest {
         });
     }
 
-    private LiveData<List<Movie>> getMovies(FragmentActivity activity) {
+    private LiveData<List<Movie>> getPopularMovies(FragmentActivity activity) {
         Repository repository = InjectorUtils.getRepository(activity);
-        return repository.getMovies();
+        return repository.getPopularMovies();
     }
 
     private TMDb spyTMDb(FragmentActivity activity) {
