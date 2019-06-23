@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.udacity.popularmovies.api.TMDb;
 import com.udacity.popularmovies.data.Repository;
 import com.udacity.popularmovies.data.UpdateErrorListener;
 import com.udacity.popularmovies.data.database.Movie;
@@ -14,6 +15,7 @@ import java.util.List;
 class MainActivityViewModel extends ViewModel {
 
     private Repository repository;
+    private TMDb tmdb;
     private LiveData<List<Movie>> popularMovies;
     private LiveData<List<Movie>> topRatedMovies;
     private LiveData<List<Movie>> favoriteMovies;
@@ -24,6 +26,7 @@ class MainActivityViewModel extends ViewModel {
 
     LiveData<List<Movie>> getPopularMovies() {
         if (popularMovies == null) {
+            tmdb.fetchPopularMovies();
             popularMovies = repository.getPopularMovies();
         }
         return popularMovies;
@@ -31,6 +34,7 @@ class MainActivityViewModel extends ViewModel {
 
     LiveData<List<Movie>> getTopRatedMovies() {
         if (topRatedMovies == null) {
+            tmdb.fetchTopRatedMovies();
             topRatedMovies = repository.getTopRatedMovies();
         }
         return topRatedMovies;
@@ -66,5 +70,9 @@ class MainActivityViewModel extends ViewModel {
         if (favoriteMovies != null) {
             favoriteMovies.removeObservers(lifecycleOwner);
         }
+    }
+
+    void setTmdb(TMDb tmdb) {
+        this.tmdb = tmdb;
     }
 }

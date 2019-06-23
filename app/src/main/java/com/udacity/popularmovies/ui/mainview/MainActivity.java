@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
         MainActivityViewModel viewModel =
                 ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
         viewModel.setUpdateErrorListener(this);
+        viewModel.setTmdb(tmdb);
         return viewModel;
     }
 
@@ -80,13 +81,13 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
     private void showMovies() {
         switch (movieSorting) {
             case SORTED_BY_POPULARITY:
-                showPopularMovies();
+                observePopularMovies();
                 return;
             case SORTED_BY_RATING:
-                showTopRatedMovies();
+                observeTopRatedMovies();
                 return;
             case FAVORITES:
-                showFavoriteMovies();
+                observeFavoriteMovies();
         }
     }
 
@@ -112,21 +113,21 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_sort_by_popularity) {
-            showPopularMovies();
+            selectPopularMovies();
             return true;
         }
         if (id == R.id.action_sort_by_rating) {
-            showTopRatedMovies();
+            selectTopRatedMovies();
             return true;
         }
         if (id == R.id.action_favorites) {
-            showFavoriteMovies();
+            selectFavoriteMovies();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showPopularMovies() {
+    private void selectPopularMovies() {
         movieSorting = MovieSorting.SORTED_BY_POPULARITY;
         observePopularMovies();
         tmdb.fetchPopularMovies();
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
                 movies -> runOnUiThread(() -> adapter.updateAll(movies)));
     }
 
-    private void showTopRatedMovies() {
+    private void selectTopRatedMovies() {
         movieSorting = MovieSorting.SORTED_BY_RATING;
         observeTopRatedMovies();
         tmdb.fetchTopRatedMovies();
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
                 movies -> runOnUiThread(() -> adapter.updateAll(movies)));
     }
 
-    private void showFavoriteMovies() {
+    private void selectFavoriteMovies() {
         movieSorting = MovieSorting.FAVORITES;
         observeFavoriteMovies();
     }
@@ -166,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
 
     @Override
     protected void onDestroy() {
+        tmdb.close();
         viewModel.removeObservers(this);
         viewModel.removeUpdateErrorListener();
         super.onDestroy();

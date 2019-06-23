@@ -61,4 +61,8 @@ public class TMDb {
         String reviewsUrl = activity.getString(R.string.reviews_url, id, apiKey);
         reviewsDownloader.download(reviewsUrl);
     }
+
+    public void close() {
+        activity = null;
+    }
 }
