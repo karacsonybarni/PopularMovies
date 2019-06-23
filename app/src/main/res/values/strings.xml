@@ -16,11 +16,14 @@
     <string name="action_sort_by_rating">Sort by rating</string>
     <string name="action_favorites">Show favorites</string>
 
+    <string name="share_trailer">Share trailer</string>
     <string name="rating">%1$.1f/10</string>
     <string name="favorite_button_unchecked">Mark as\nfavorite</string>
     <string name="favorite_button_checked">Already a\nfavorite</string>
     <string name="trailers_label">Trailers</string>
     <string name="reviews_label">Reviews</string>
+    <string name="trailer_app_uri">vnd.youtube:%1$s</string>
+    <string name="trailer_web_url">http://www.youtube.com/watch?v=%1$s</string>
 
     <string name="tmdb_logo">TMDb logo</string>
 </resources>

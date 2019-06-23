@@ -48,7 +48,6 @@ public class NetworkFragment extends Fragment {
      * Start non-blocking execution of DownloadTask.
      */
     void startDownload(String urlString, DownloadCallback<String> downloadCallback) {
-        cancelDownload();
         downloadTask = new DownloadTask(downloadCallback);
         downloadTask.execute(urlString);
     }

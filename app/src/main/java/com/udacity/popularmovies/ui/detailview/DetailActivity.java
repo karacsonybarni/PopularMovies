@@ -1,11 +1,15 @@
 package com.udacity.popularmovies.ui.detailview;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -25,6 +29,7 @@ public class DetailActivity extends AppCompatActivity {
     private int movieId;
     private Movie movie;
     private TMDb tmdb;
+    private ShareActionProvider shareActionProvider;
     private boolean noInternetErrorAlreadyShown;
 
     @Override
@@ -153,8 +158,21 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail, menu);
+        MenuItem shareItem = menu.findItem(R.id.share_trailer_url);
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        shareActionProvider.setShareIntent(null);
+        return true;
+    }
+
+    @Override
     protected void onDestroy() {
         viewModel.getMovie().removeObservers(this);
         super.onDestroy();
+    }
+
+    ShareActionProvider getShareActionProvider() {
+        return shareActionProvider;
     }
 }

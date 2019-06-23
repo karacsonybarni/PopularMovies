@@ -35,9 +35,18 @@ class TrailersPresenter implements TrailersUpdateListener {
     @Override
     public void onTrailersFetched(List<Trailer> trailers) {
         if (!trailers.isEmpty()) {
+            setupSharingFirstTrailer(trailers.get(0).getKey());
             addTrailersToLayout(trailers);
             showTrailersLayout();
         }
+    }
+
+    private void setupSharingFirstTrailer(String trailerId) {
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+        String url = activity.getString(R.string.trailer_web_url, trailerId);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+        activity.getShareActionProvider().setShareIntent(sendIntent);
     }
 
     private void addTrailersToLayout(List<Trailer> trailers) {
@@ -62,15 +71,25 @@ class TrailersPresenter implements TrailersUpdateListener {
     }
 
     private void playTrailer(String id) {
-        Uri appUri = Uri.parse("vnd.youtube:" + id);
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, appUri);
         try {
-            activity.startActivity(appIntent);
+            shareAppUri(id);
         } catch (ActivityNotFoundException ex) {
-            Uri webPageUri = Uri.parse("http://www.youtube.com/watch?v=" + id);
-            Intent webIntent = new Intent(Intent.ACTION_VIEW, webPageUri);
-            activity.startActivity(webIntent);
+            shareWebPageUrl(id);
         }
+    }
+
+    private void shareAppUri(String id) {
+        String uriString = activity.getString(R.string.trailer_app_uri, id);
+        Uri appUri = Uri.parse(uriString);
+        Intent viewIntent = new Intent(Intent.ACTION_VIEW, appUri);
+        activity.startActivity(viewIntent);
+    }
+
+    private void shareWebPageUrl(String id) {
+        String uriString = activity.getString(R.string.trailer_web_url, id);
+        Uri uri = Uri.parse(uriString);
+        Intent viewIntent = new Intent(Intent.ACTION_VIEW, uri);
+        activity.startActivity(viewIntent);
     }
 
     private void addSeparator() {
