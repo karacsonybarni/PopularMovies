@@ -15,8 +15,11 @@ import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.api.TMDb;
 import com.udacity.popularmovies.data.Repository;
 import com.udacity.popularmovies.data.UpdateErrorListener;
+import com.udacity.popularmovies.data.database.Movie;
 import com.udacity.popularmovies.utils.ErrorInfo;
 import com.udacity.popularmovies.utils.InjectorUtils;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements UpdateErrorListener {
 
@@ -135,9 +138,7 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
 
     private void observePopularMovies() {
         viewModel.removeObservers(this);
-        viewModel.getPopularMovies().observe(
-                this,
-                movies -> runOnUiThread(() -> adapter.updateAll(movies)));
+        viewModel.getPopularMovies().observe(this, this::updateAdapter);
     }
 
     private void selectTopRatedMovies() {
@@ -148,9 +149,7 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
 
     private void observeTopRatedMovies() {
         viewModel.removeObservers(this);
-        viewModel.getTopRatedMovies().observe(
-                this,
-                movies -> runOnUiThread(() -> adapter.updateAll(movies)));
+        viewModel.getTopRatedMovies().observe(this, this::updateAdapter);
     }
 
     private void selectFavoriteMovies() {
@@ -160,9 +159,11 @@ public class MainActivity extends AppCompatActivity implements UpdateErrorListen
 
     private void observeFavoriteMovies() {
         viewModel.removeObservers(this);
-        viewModel.getFavoriteMovies().observe(
-                this,
-                movies -> runOnUiThread(() -> adapter.updateAll(movies)));
+        viewModel.getFavoriteMovies().observe(this, this::updateAdapter);
+    }
+
+    private void updateAdapter(List<Movie> movies) {
+        runOnUiThread(() -> adapter.updateAll(movies));
     }
 
     @Override
