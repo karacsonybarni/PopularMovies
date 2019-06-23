@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.ShareActionProvider;
+
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.api.TMDb;
 import com.udacity.popularmovies.api.TrailersUpdateListener;
@@ -42,11 +44,14 @@ class TrailersPresenter implements TrailersUpdateListener {
     }
 
     private void setupSharingFirstTrailer(String trailerId) {
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setType("text/plain");
-        String url = activity.getString(R.string.trailer_web_url, trailerId);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
-        activity.getShareActionProvider().setShareIntent(sendIntent);
+        ShareActionProvider shareActionProvider = activity.getShareActionProvider();
+        if (shareActionProvider != null) {
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.setType("text/plain");
+            String url = activity.getString(R.string.trailer_web_url, trailerId);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+            shareActionProvider.setShareIntent(sendIntent);
+        }
     }
 
     private void addTrailersToLayout(List<Trailer> trailers) {
