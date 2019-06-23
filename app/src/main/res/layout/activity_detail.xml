@@ -157,8 +157,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/tmdb_logo_with_padding_height"
         android:background="@color/colorPrimary"
+        android:contentDescription="@string/tmdb_logo"
         android:paddingTop="@dimen/tmdb_logo_paddingTop"
         android:scaleType="center"
-        android:src="@drawable/ic_tmdb_logo"
-        tools:ignore="ContentDescription" />
+        android:src="@drawable/ic_tmdb_logo" />
 </LinearLayout>

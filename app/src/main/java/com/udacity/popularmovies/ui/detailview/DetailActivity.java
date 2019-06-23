@@ -125,6 +125,7 @@ public class DetailActivity extends AppCompatActivity {
     private void loadPoster() {
         String posterUrl = getString(R.string.movie_poster_url, movie.getPosterPath());
         ImageView poster = findViewById(R.id.poster);
+        poster.setContentDescription(movie.getTitle());
         Picasso.get().load(posterUrl).into(poster);
     }
 

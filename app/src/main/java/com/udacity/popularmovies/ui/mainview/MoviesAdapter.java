@@ -46,6 +46,7 @@ class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterViewHolder>
         Movie movie = movies.get(position);
         ImageView posterView = holder.posterView;
 
+        posterView.setContentDescription(movie.getTitle());
         loadPoster(movie.getPosterPath(), posterView);
         posterView.setOnClickListener(newClickListener(movie));
     }

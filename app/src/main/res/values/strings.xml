@@ -21,4 +21,6 @@
     <string name="favorite_button_checked">Already a\nfavorite</string>
     <string name="trailers_label">Trailers</string>
     <string name="reviews_label">Reviews</string>
+
+    <string name="tmdb_logo">TMDb logo</string>
 </resources>
