@@ -4,7 +4,7 @@ The Popular Movies is an Android app that shows the most popular movies from The
 
 ## Key features
 
-* Presents the user with a grid arrangement of movie posters upon launch
+* Presents the user with a grid arrangement of movie posters
 * Allows users to change sort order via the settings menu:
   * The sort order can be by most popular or by highest-rated
 * Allows users to tap on a movie poster 
